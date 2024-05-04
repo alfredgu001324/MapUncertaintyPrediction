@@ -1,9 +1,9 @@
-## Environment Setup
+## Map Estimation Environment Setup
 
 **Create and Activate Conda Environment**
 ```
-conda create -n map_predict python=3.8 -y
-conda activate map_predict
+conda create -n map python=3.8 -y
+conda activate map
 ```
 
 **Install PyTorch and Related Packages**
@@ -29,6 +29,14 @@ python setup.py develop
 ```
 cd /path/to/MapTR_v2_modified/projects/mmdet3d_plugin/maptr/modules/ops/geometric_kernel_attn
 python setup.py build install
+```
+
+## Trajectory Prediction Environment Setup
+
+**Create and Activate Conda Environment**
+```
+conda create -n predict python=3.8 -y
+conda activate predict
 ```
 
 **Install Trajdata**

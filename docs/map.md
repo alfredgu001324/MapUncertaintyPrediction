@@ -1,5 +1,17 @@
 ## Map Training
-Follow the original guide of respective map estimation models, or simply run `train.sh` in each mapping folder for single GPU training
 
-## Map Evaluation
-Inlcude the desired output path in `MapUncertaintyPrediction/MapTR_v2_modified/mmdetection3d/mmdet3d/apis/test.py` to output results including sample tokens in `.pkl` file format.
+### MapTRv2
+
+Whenever training and evaluating, please edit the config paths (and checkpoint paths if testing) in the bash file. Also, edit the data paths in the config files to your nuscenes raw data and processed annotation data. 
+
+**Training**
+```
+cd /MapUncertaintyPrediction/MapTRv2_modified/
+source train.sh                                  
+```
+
+**Evaluation**
+```
+cd /MapUncertaintyPrediction/MapTRv2_modified/
+source test.sh                                  
+```

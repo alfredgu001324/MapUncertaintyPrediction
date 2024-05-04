@@ -13,6 +13,9 @@ The unorganized version is available [here](https://drive.google.com/file/d/1kLf
 - [Trajectory Train and Eval](docs/trj.md)
 - [Visualization](docs/visualization.md)
 
+## Results
+
+Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI7PLirHLS64luE1fV2EPG0sB?usp=sharing). Trajectory prediction checkpoints are here. 
 
 ## Citation
 

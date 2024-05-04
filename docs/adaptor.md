@@ -5,7 +5,7 @@
 - Trajdata pickle files: `traj_scene_frame_{full_train, full_val, mini_train, mini_val}.pkl`
 - Ground truth files: `gt_{full_train, full_val, mini_val}.pickle`
 
-You can download the above files from [here](https://drive.google.com/drive/folders/1VdC4VwVbKA4ADI7fgeYEO-H1o_p9WUuF?usp=drive_link)
+You can download the above files from [here](https://drive.google.com/drive/folders/17kqpilI4dP6ZY7XFnWArPbMSlpDq8ErM?usp=drive_link)
 
 ### Data Merging Process
 Run the script `adaptor.py` in `MapUncertaintyPrediction/adaptor/` to merge data mapping data and trajectory data. 
