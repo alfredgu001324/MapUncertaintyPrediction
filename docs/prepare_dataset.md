@@ -3,7 +3,7 @@
 ### NuScenes Download
 **Make folders to store raw data and processed data**
 ```
-mkdir nuscenes processed trj_data
+mkdir nuscenes processed
 cd processed
 mkdir maptr maptrv2 stream_new stream
 ```
@@ -32,7 +32,6 @@ MapUncertaintyPrediction
 │   ├── maptrv2/
 │   ├── stream/
 │   ├── stream_new/
-├── trj_data/
 ```
 
 ### MapTR
@@ -66,7 +65,6 @@ MapUncertaintyPrediction
 │   ├── maptrv2/
 │   ├── stream/
 │   ├── stream_new/
-├── trj_data/
 ```
 
 ### MapTRv2
@@ -98,7 +96,6 @@ MapUncertaintyPrediction
 |   |   ├── nuscenes_map_infos_temporal_val.pkl
 │   ├── stream/
 │   ├── stream_new/
-├── trj_data/
 ```
 
 ### StreamMapNet
@@ -123,5 +120,4 @@ MapUncertaintyPrediction
 │   ├── stream_new/
 |   |   ├── nuscenes_infos_temporal_train_newsplit.pkl
 |   |   ├── nuscenes_infos_temporal_val_newsplit.pkl
-├── trj_data/
 ```

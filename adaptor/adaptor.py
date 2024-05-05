@@ -131,7 +131,7 @@ def main(args):
         num_workers=4,
         verbose=True,
         data_dirs={  
-            f"nusc_{args.version}": args.datroot,
+            f"nusc_{args.version}": args.dataroot,
         },
     )
 
@@ -404,7 +404,7 @@ def parse_args():
     parser.add_argument('--version', type=str, default='trainval', choices=['trainval', 'mini'], help='version of nuscenes')
     parser.add_argument('--split', type=str, default='val', choices=['train', 'train_val', 'val', 'mini_train', 'mini_val'])
 
-    parser.add_argument('--map_model', type=str, required=True choices=['MapTR', 'StreamMapNet'])
+    parser.add_argument('--map_model', type=str, required=True, choices=['MapTR', 'StreamMapNet'])
     parser.add_argument('--centerline', action='store_true', help='centerline usage')
 
     parser.add_argument('--dataroot', type=str, required=True, help='directory of nuscenes raw data')

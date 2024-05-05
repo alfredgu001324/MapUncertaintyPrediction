@@ -17,6 +17,11 @@ The unorganized version is available [here](https://drive.google.com/file/d/1kLf
 
 Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI7PLirHLS64luE1fV2EPG0sB?usp=sharing). Trajectory prediction checkpoints are here. 
 
+## Catalog
+
+- [ ] code release
+- [x] Initialization
+
 ## Citation
 
 If you found this repository useful, please consider citing our work:
