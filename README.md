@@ -20,7 +20,7 @@ Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI
 ## Catalog
 
 - [ ] Code release
-  - [ ] MapTR
+  - [x] MapTR
   - [x] MapTRv2
   - [ ] StreamMapNet
   - [x] HiVT
