@@ -382,7 +382,7 @@ def main(args):
     
 
     base_dir = args.save_path
-    scenes_dir = os.path.join(base_dir, args.split)
+    scenes_dir = os.path.join(base_dir, args.split, 'data')
 
     if not os.path.exists(scenes_dir):
         os.makedirs(scenes_dir)

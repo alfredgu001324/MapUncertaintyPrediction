@@ -208,10 +208,9 @@ model = dict(
             pc_range=point_cloud_range))))
 
 dataset_type = 'CustomNuScenesOfflineLocalMapDataset'
-data_root = '/home/data/nuscenes/'
-data_ann = '/home/YOUR_USERNAME_HERE/data/maptrv2_mini/'
+data_root = '/MapUncertaintyPrediction/nuscenes/'
+data_ann = '/MapUncertaintyPrediction/processed/maptrv2/'
 file_client_args = dict(backend='disk')
-
 
 train_pipeline = [
     dict(type='LoadMultiViewImageFromFiles', to_float32=True),
@@ -306,12 +305,12 @@ data = dict(
 
 optimizer = dict(
     type='AdamW',
-    lr=1.5e-4, #6
+    lr=1.5e-4, 
     paramwise_cfg=dict(
         custom_keys={
             'img_backbone': dict(lr_mult=0.1),
         }),
-    weight_decay=0.01) #0.01
+    weight_decay=0.01) 
 
 optimizer_config = dict(grad_clip=dict(max_norm=3, norm_type=2))
 # learning policy

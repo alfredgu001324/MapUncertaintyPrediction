@@ -306,12 +306,12 @@ data = dict(
 
 optimizer = dict(
     type='AdamW',
-    lr=1.5e-4,  #6
+    lr=1.5e-4,  
     paramwise_cfg=dict(
         custom_keys={
             'img_backbone': dict(lr_mult=0.1),
         }),
-    weight_decay=0.01)  #0.01
+    weight_decay=0.01)  
 
 optimizer_config = dict(grad_clip=dict(max_norm=3, norm_type=2))
 # learning policy

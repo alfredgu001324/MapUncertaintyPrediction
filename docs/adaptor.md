@@ -34,6 +34,8 @@ MapUncertaintyPrediction
 │   ├── stream/
 ```
 
+**Merging Map Data and Trajectory Data**
+
 Run the script `adaptor.py` in `MapUncertaintyPrediction/adaptor/` to merge data mapping data and trajectory data. 
 
 ```
@@ -41,9 +43,9 @@ cd adaptor
 
 # To merge MapTRv2 centerline, add in an additional argument --centerline
 python adaptor.py \
-  --version mini \                                       # ['trainval', 'mini']
-  --split mini_val \                                     # ['train', 'train_val', 'val', 'mini_train', 'mini_val']
-  --map_model MapTR \                                    # ['MapTR', 'StreamMapNet']
+  --version mini \                                       # [trainval, mini]
+  --split mini_val \                                     # [train, train_val, val, mini_train, mini_val]
+  --map_model MapTR \                                    # [MapTR, StreamMapNet]
   --dataroot ../nuscenes \
   --index_file ../adaptor_files/traj_scene_frame_mini_val.pkl \
   --map_file ../adaptor_files/mapping_results.pickle \
@@ -52,4 +54,22 @@ python adaptor.py \
 
 # For visualization
 python adaptor_vis.py --data_path ../trj_data/maptr                        
+```
+
+After running the above script, **folder structure** should look like this:
+```
+MapUncertaintyPrediction
+├── nuscenes/
+├── processed/
+├── adaptor_files/
+├── trj_data/
+|   ├── maptr/
+│   |   ├── mini_val/
+│   |   |   ├── data/
+│   |   |   |   ├── scene-{scene_id}.pkl
+│   |   ├── train/
+│   |   ├── val/
+│   ├── maptrv2/
+│   ├── maptrv2_cent/
+│   ├── stream/
 ```

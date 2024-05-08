@@ -41,6 +41,7 @@ conda activate predict
 
 **Install Trajdata**
 ```
-pip install git+https://github.com/NVlabs/trajdata.git
+pip install trajdata==1.3.1
+pip install "trajdata[nusc]"
 ```
 

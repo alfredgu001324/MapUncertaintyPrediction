@@ -38,7 +38,7 @@ MapUncertaintyPrediction
 
 **Prepare Pre-trained Model**
 ```
-cd /path/to/MapTR_modified
+cd MapTR_modified
 mkdir ckpts
 
 cd ckpts 
@@ -49,7 +49,7 @@ wget https://download.pytorch.org/models/resnet18-f37072fd.pth
 **Prepare nuScenes data**
 
 ```
-python MapTR_modified/tools/create_data.py nuscenes --root-path ./nuscenes --out-dir ./processed/maptr --extra-tag nuscenes --version v1.0 --canbus ./nuscenes
+python tools/create_data.py nuscenes --root-path ../nuscenes --out-dir ../processed/maptr --extra-tag nuscenes --version v1.0 --canbus ../nuscenes
 ```
 
 Using the above code will generate `nuscenes_infos_temporal_{train,val}.pkl`.
@@ -71,7 +71,7 @@ MapUncertaintyPrediction
 
 **Prepare Pre-trained Model**
 ```
-cd /path/to/MapTR_modified
+cd MapTRv2_modified
 mkdir ckpts
 
 cd ckpts 
@@ -81,7 +81,7 @@ wget https://download.pytorch.org/models/resnet18-f37072fd.pth
 
 **Prepare nuScenes Data**
 ```
-python MapTRv2_modified/tools/maptrv2/custom_nusc_map_converter.py --root-path ./nuscenes --out-dir ./processed/maptrv2 --extra-tag nuscenes --version v1.0 --canbus ./data
+python tools/maptrv2/custom_nusc_map_converter.py --root-path ../nuscenes --out-dir ../processed/maptrv2 --extra-tag nuscenes --version v1.0 --canbus ../nuscenes
 ```
 Using the above code will generate `nuscenes_map_infos_temporal_{train,val}.pkl`, which contain local vectorized map annotations.
 
@@ -102,8 +102,10 @@ MapUncertaintyPrediction
 
 **Prepare nuScenes Data**
 ```
-python StreamMapNet_modified/tools/nuscenes_converter.py --data-root ./nuscenes --newsplit --dest_path ./processed/stream_new
-python StreamMapNet_modified/tools/nuscenes_converter.py --data-root ./nuscenes --dest_path ./processed/stream
+cd StreamMapNet_modified
+
+python tools/nuscenes_converter.py --data-root ../nuscenes --newsplit --dest_path ../processed/stream_new
+python tools/nuscenes_converter.py --data-root ../nuscenes --dest_path ../processed/stream
 ```
 Using the above code will generate `nuscenes_map_infos_{train,val}_{newsplit,}.pkl`, which contain local vectorized map annotations.
 

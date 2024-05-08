@@ -15,11 +15,16 @@ The unorganized version is available [here](https://drive.google.com/file/d/1kLf
 
 ## Results
 
-Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI7PLirHLS64luE1fV2EPG0sB?usp=sharing). Trajectory prediction checkpoints are here. 
+Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI7PLirHLS64luE1fV2EPG0sB?usp=sharing). Trajectory prediction checkpoints are [here](https://drive.google.com/drive/folders/1b46HUqHxeqrZQOYRbtsnltDU2bR8Fjkj?usp=sharing). 
 
 ## Catalog
 
-- [ ] code release
+- [ ] Code release
+  - [ ] MapTR
+  - [x] MapTRv2
+  - [ ] StreamMapNet
+  - [x] HiVT
+  - [ ] DenseTNT
 - [x] Initialization
 
 ## Citation

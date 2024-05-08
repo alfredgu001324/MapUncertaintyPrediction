@@ -6,12 +6,35 @@ Whenever training and evaluating, please edit the config paths (and checkpoint p
 
 **Training**
 ```
-cd /MapUncertaintyPrediction/MapTRv2_modified/
-source train.sh                                  
+cd MapTRv2_modified/
+source train.sh      
+```
+
+Or by running:
+```
+export PYTHONPATH="${PYTHONPATH}:/MapUncertaintyPrediction/MapTRv2_modified"
+
+python tools/train.py \
+  projects/configs/maptrv2/maptrv2_nusc_r50_24ep.py \
+  --deterministic \
+  --no-validate
+
 ```
 
 **Evaluation**
 ```
-cd /MapUncertaintyPrediction/MapTRv2_modified/
+cd MapTRv2_modified/
 source test.sh                                  
+```
+
+Or by running:
+
+```
+export PYTHONPATH="${PYTHONPATH}:/MapUncertaintyPrediction/MapTRv2_modified"
+
+python tools/test.py \
+  projects/configs/maptrv2/maptrv2_nusc_r50_24ep.py \
+  work_dirs/maptrv2_nusc_r50_24ep/YOURCHECKPOINT.pth \
+  --eval chamfer
+
 ```
