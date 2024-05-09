@@ -42,7 +42,8 @@ def single_gpu_test(model,
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
 
-        # For MapTR series, please uncomment this
+        # For MapTR series, please uncomment this line
+        # For StreamMapNet, please comment this line
         result[0]['pts_bbox']['sample_idx'] = data['img_metas'][0].data[0][0]['sample_idx']
 
         if show:

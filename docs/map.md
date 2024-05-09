@@ -84,3 +84,42 @@ python tools/test.py \
   --eval chamfer
 
 ```
+
+### StreamMapNet
+
+**Training**
+
+Run
+```
+cd StreamMapNet_modified/
+source train.sh      
+```
+
+Or by running:
+```
+export PYTHONPATH="${PYTHONPATH}:/MapUncertaintyPrediction/StreamMapNet_modified"
+
+python tools/train.py \
+  plugin/configs/nusc_newsplit_480_60x30_24e.py \
+  --deterministic \
+  --no-validate
+```
+
+**Evaluation**
+
+Run
+```
+cd StreamMapNet_modified/
+source test.sh                                  
+```
+
+Or by running:
+
+```
+export PYTHONPATH="${PYTHONPATH}:/MapUncertaintyPrediction/StreamMapNet_modified"
+
+python tools/test.py \
+  plugin/configs/nusc_newsplit_480_60x30_24e.py \
+  work_dirs/nusc_newsplit_480_60x30_24e/YOURCHECKPOINT.pth \
+  --eval
+```
