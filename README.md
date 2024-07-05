@@ -1,7 +1,5 @@
 # MapUncertaintyPrediction
-This repository contains the official implementation of [Producing and Leveraging Online Map Uncertainty in Trajectory Prediction](https://arxiv.org/abs/2403.16439) published in CVPR 2024 **[Oral]**. 
-
-The unorganized version is available [here](https://drive.google.com/file/d/1kLfPWAVKAELBiEPeGwpFdlrMRDdTb3ct/view?usp=sharing). Please follow the rough_instructions.txt to explore the code. I will finish tidying it up after I complete my exams. Thank you for your support!
+This repository contains the official implementation of [Producing and Leveraging Online Map Uncertainty in Trajectory Prediction](https://arxiv.org/abs/2403.16439) published in CVPR 2024 **[Award Candidate]**. 
 
 ![](assets/flowchart.png)
 
@@ -20,12 +18,12 @@ Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI
 ## Catalog
 
 - [ ] Visualization Code
-- [ ] Code release
+- [x] Code release
   - [x] MapTR
   - [x] MapTRv2
   - [x] StreamMapNet
   - [x] HiVT
-  - [ ] DenseTNT
+  - [x] DenseTNT
 - [x] Initialization
 
 ## Citation
