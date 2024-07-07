@@ -24,16 +24,14 @@ import matplotlib.gridspec as gridspec
 from PIL import Image
 
 def average_of_tuples(tuple_list):
-    if not tuple_list:  # Check if the list is empty
+    if not tuple_list:  
         return ()
 
-    # Initialize sums of each tuple position with the first tuple
     sum_tuple = [0] * len(tuple_list[0])
     for tup in tuple_list:
         for i, value in enumerate(tup):
             sum_tuple[i] += value
     
-    # Calculate the average for each position
     num_tuples = len(tuple_list)
     average_tuple = tuple(sum_val / num_tuples for sum_val in sum_tuple)
     
@@ -49,14 +47,6 @@ def normalize_lanes(x, y, lanes, theta):
         n_lanes.append(normalize_lane)
     
     return n_lanes
-
-def normalize_point(x, y, point, theta):
-    R = np.array([[np.cos(theta), -np.sin(theta)],
-                [np.sin(theta), np.cos(theta)]])
-    
-    normalize_point = np.dot(point - np.array([x, y]), R)
-    
-    return normalize_point
 
 def normalize_traj(x, y, traj, theta):
     R = np.array([[np.cos(theta), -np.sin(theta)],
@@ -105,20 +95,9 @@ def calc_metrics_min(prediction, gt):
     mode = np.argmin(fde)
     best = prediction[mode]
     min_ade = np.mean(np.linalg.norm(best - gt, axis=1), axis=0)
-    # mr = (fde > 2.0).sum() / len(fde)
     mr = 1 if min_fde > 2.0 else 0
 
     return (min_ade, min_fde, mr)
-
-def calc_metrics_mean(prediction, gt):
-    last_predicted = prediction[:, -1, :]  # Shape (6, 2)
-    fde = np.linalg.norm(last_predicted - gt[-1], axis=1)
-    mean_fde = np.mean(np.linalg.norm(last_predicted - gt[-1], axis=1))  
-    gt_expanded = np.expand_dims(gt, 0)
-    mean_ade = np.mean(np.mean(np.linalg.norm(prediction - gt_expanded, axis=2), axis=1))
-    mr = (fde > 2.0).sum() / len(fde)
-
-    return (mean_ade, mean_fde, mr)
 
 def plot_points_with_laplace_variances(x, y, beta_x, beta_y, color, sample_idx, ax, heading, std):
     for i in range(len(x)):
@@ -137,7 +116,6 @@ def plot_points_with_laplace_variances(x, y, beta_x, beta_y, color, sample_idx, 
             ellipse = Ellipse((x[i][j], y[i][j]), width=width, height=height,
                               fc=color, lw=0.5, alpha=0.3) 
             ax.add_patch(ellipse)
-
 
 def render(box,
             axis: Axes,
@@ -178,13 +156,10 @@ def render(box,
         axis.text(center_bottom[0], center_bottom[1], text, ha='left', fontsize=5)
 
 def fig_to_image(fig):
-    """ Convert a Matplotlib figure to a 3D numpy array with RGB channels. """
-    # Set the DPI of the figure
     fig.set_dpi(300)
     
-    # Resize the figure according to the new DPI
     fig.set_size_inches(fig.get_figwidth(), fig.get_figheight())
-    fig.canvas.draw()  # Draw the canvas
+    fig.canvas.draw()  
     w,h = fig.canvas.get_width_height()
     buf = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
     buf.shape = (h, w, 3)
@@ -205,7 +180,6 @@ def create_mp4_with_subplots(frames, output_path):
                 writer.append_data(frame)
 
 def place_colored_text(axi, text, x, y, fontdict):
-    # Regex to find percentage changes and split text accordingly
     parts = re.split(r'(\(\s*[+-]?\d+%\))', text)
     current_x = x
     for i, part in enumerate(parts):
@@ -230,8 +204,6 @@ def place_colored_text(axi, text, x, y, fontdict):
 
 def main(args):
     tokens = []
-    # nusc = NuScenes(version='v1.0-mini', dataroot='/home/data/nuscenes', verbose=True)
-    # nusc = NuScenes(version='v1.0-trainval', dataroot='/home/data/nuscenes', verbose=True)
     nusc = NuScenes(version=f'v1.0-{args.version}', dataroot=args.dataroot, verbose=True)
     splits = create_splits_scenes()
 
@@ -261,7 +233,7 @@ def main(args):
     if args.map == 'MapTR':
         MapTR = True
 
-    folder_path = args.processed_data
+    folder_path = args.trj_data
 
     data = {}
 
@@ -276,17 +248,14 @@ def main(args):
 
             data[int(scene_id)] = data_content
 
-    with open(args.predict_data, 'rb') as handle:
+    with open(args.base_results, 'rb') as handle:
         predict_data = pickle.load(handle)
 
-    with open(args.predict_data_unc, 'rb') as handle:
+    with open(args.unc_results, 'rb') as handle:
         predict_data_unc = pickle.load(handle)
 
     with open(args.boxes, 'rb') as handle:
         boxes_gt_all = pickle.load(handle)
-
-    with open(args.gt_data, 'rb') as handle:
-        gt_data = pickle.load(handle)
 
     for key, value in predict_data.items():
         # HiVT
@@ -447,18 +416,20 @@ def main(args):
 
                 # GT Map Plotting
                 sample_token = value['sample_token']
-                pts = gt_data[sample_token]['gt_lines']
-                labels = gt_data[sample_token]['gt_labels']
-                x = pts[:, :, 0]  
-                y = pts[:, :, 1] + 1  
-                beta_x = np.zeros_like(x)
-                beta_y = np.zeros_like(y)
-                scores = np.ones(x.shape[0])
+                colors_plt = {'divider': 'orange', 'ped_crossing': 'b', 'boundary': 'g'}
+                for k , v in value['maptr_gt_map'].items():
+                    gt_map_element = np.array(normalize_lanes(x, y, np.array(v), heading))
+                    if gt_map_element.shape == (0,):
+                        continue
+                    else:
+                        gt_map_element = gt_map_element[:, :, [1, 0]]
+                    gt_map_element[:,:,0] = -gt_map_element[:,:,0]
+                    x_pts = gt_map_element[:, :, 0]
+                    y_pts = gt_map_element[:, :, 1]
 
-                colors_plt = ['orange', 'b', 'g', (0.65,0.65,0.65)]
-                for i in range(len(x)):
-                    ax[2].plot(x[i], y[i] - offset, color=colors_plt[labels[i]], linewidth=1, alpha=0.8, zorder=-1)
-                    ax[2].scatter(x[i], y[i] - offset, color=colors_plt[labels[i]], s=2, alpha=0.8, zorder=-1)
+                    for j in range(len(x_pts)):
+                        ax[2].plot(x_pts[j], y_pts[j], color=colors_plt[k], linewidth=1, alpha=0.8, zorder=-1)
+                        ax[2].scatter(x_pts[j], y_pts[j], color=colors_plt[k], s=2, alpha=0.8, zorder=-1)
 
                 boxes_gt = boxes_gt_all[sample_token]
                 ignore_list = ['barrier', 'traffic_cone']
@@ -546,11 +517,10 @@ def parse_args():
     parser.add_argument('--trj_pred', type=str, default='HiVT', choices=['HiVT', 'DenseTNT'], help='trj prediction model')
     parser.add_argument('--map', type=str, default='MapTR', choices=['MapTR', 'StreamMapNet'])
 
-    parser.add_argument('--processed_data', type=str, required=True, help='processed data from adaptor')
-    parser.add_argument('--predict_data', type=str, required=True, help='trj prediction pkl of baseline approach')
-    parser.add_argument('--predict_data_unc', type=str, required=True, help='trj prediction pkl of unc approach')
+    parser.add_argument('--trj_data', type=str, required=True, help='processed data from adaptor')
+    parser.add_argument('--base_results', type=str, required=True, help='trj prediction pkl of baseline approach')
+    parser.add_argument('--unc_results', type=str, required=True, help='trj prediction pkl of unc approach')
     parser.add_argument('--boxes', type=str, required=True, help='gt boxes data path')
-    parser.add_argument('--gt_data', type=str, required=True, help='gt map data')
 
     parser.add_argument('--save_path', type=str, required=True, help='gif save path')
     args = parser.parse_args()

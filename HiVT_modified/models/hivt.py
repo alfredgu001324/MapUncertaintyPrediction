@@ -204,12 +204,10 @@ class HiVT(pl.LightningModule):
             with open(save_path, 'rb') as file:
                 predict_data = pickle.load(file)
             for i in range(len(data['seq_id'])):
-                # predict_data[data['seq_id'][i].item()] = y_hat_agent[i].cpu().numpy()
                 predict_data[data['seq_id'][i].item()] = torch.cat([y_hat_agent[i], y_hat_agent_uncertainty[i]], dim=-1).cpu().numpy()
         else:
             predict_data = {}
             for i in range(len(data['seq_id'])):
-                # predict_data[data['seq_id'][i].item()] = y_hat_agent[i].cpu().numpy()
                 predict_data[data['seq_id'][i].item()] = torch.cat([y_hat_agent[i], y_hat_agent_uncertainty[i]], dim=-1).cpu().numpy()
         with open(save_path, 'wb') as file:
             pickle.dump(predict_data, file)
