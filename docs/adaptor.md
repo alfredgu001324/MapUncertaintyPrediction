@@ -73,3 +73,5 @@ MapUncertaintyPrediction
 │   ├── maptrv2_cent/
 │   ├── stream/
 ```
+
+**Note** that this merging process needs to be conducted at least twice per mapping method. Once on train split, once on val split. You need mapping results from evaluating on both the train and val set for each mapping method. So in total, the mapping evaluation scripts should be run 8 times (2 times 4 mapping methods). If you only want to examine one of the mapping method, then 2 times are enough.
