@@ -16,7 +16,7 @@ This repository contains the official implementation of [Producing and Leveragin
 Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI7PLirHLS64luE1fV2EPG0sB?usp=sharing). Trajectory prediction checkpoints are [here](https://drive.google.com/drive/folders/1b46HUqHxeqrZQOYRbtsnltDU2bR8Fjkj?usp=sharing). 
 
 ## News
-- An [extention](https://arxiv.org/abs/2407.06683) of this work has been published at ECCV 2024. Check it out!
+- **July 01, 2024**: An [extention](https://github.com/alfredgu001324/MapBEVPrediction) of this work has been published at ECCV 2024. Check it out!
 - **May 29, 2024**: This work has been slected as a **Best Paper Award Finalist** at CVPR 2024! **Top 0.2% of all submissions (24/11,532)**
 
 ## Catalog
