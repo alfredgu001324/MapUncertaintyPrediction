@@ -135,7 +135,7 @@ class HiVT(pl.LightningModule):
     def validation_step(self, data, batch_idx):
         y_hat, pi = self(data)
 
-        # global_y_hat_agent, pi_agent, seq_id = self.visualization(data, batch_idx)
+        # global_y_hat_agent, pi_agent, seq_id = self.visualization_all(data, batch_idx)
 
         reg_mask = ~data['padding_mask'][:, self.historical_steps:]
         l2_norm = (torch.norm(y_hat[:, :, :, : 2] - data.y, p=2, dim=-1) * reg_mask).sum(dim=-1)  # [F, N]
@@ -169,20 +169,14 @@ class HiVT(pl.LightningModule):
             data_origin = data['origin']
             data_rotate_angle = data['rotate_angles'][data['av_index']]
             data_local_origin = data.positions[data['av_index'], 19, :]
-            try:
-                rotate_mat = torch.empty(len(data['av_index']), 2, 2, device=self.device)
-            except:
-                breakpoint()
+            rotate_mat = torch.empty(len(data['av_index']), 2, 2, device=self.device)
             sin_vals = torch.sin(-data_angles)
             cos_vals = torch.cos(-data_angles)
             rotate_mat[:, 0, 0] = cos_vals
             rotate_mat[:, 0, 1] = -sin_vals
             rotate_mat[:, 1, 0] = sin_vals
             rotate_mat[:, 1, 1] = cos_vals
-            try:
-                rotate_local = torch.empty(len(data['av_index']), 2, 2, device=self.device)
-            except:
-                breakpoint()
+            rotate_local = torch.empty(len(data['av_index']), 2, 2, device=self.device)
             sin_vals_angle = torch.sin(-data_rotate_angle)
             cos_vals_angle = torch.cos(-data_rotate_angle)
             rotate_local[:, 0, 0] = cos_vals_angle
@@ -198,7 +192,6 @@ class HiVT(pl.LightningModule):
                 y_hat_agent[i, :, :, :] = torch.bmm(y_hat_agent[i, :, :, :], stacked_rotate_mat) \
                                           + data_origin[i].unsqueeze(0).unsqueeze(0)
 
-        
         save_path = 'result.pkl'
         if os.path.exists(save_path):
             with open(save_path, 'rb') as file:
@@ -209,6 +202,75 @@ class HiVT(pl.LightningModule):
             predict_data = {}
             for i in range(len(data['seq_id'])):
                 predict_data[data['seq_id'][i].item()] = torch.cat([y_hat_agent[i], y_hat_agent_uncertainty[i]], dim=-1).cpu().numpy()
+        with open(save_path, 'wb') as file:
+            pickle.dump(predict_data, file)
+
+        return y_hat_agent, pi_agent, data['seq_id']
+
+    def visualization_all(self, data, batch_idx):
+        data = data.clone()
+        y_hat, pi = self(data)
+        pi = F.softmax(pi)
+        y_hat = y_hat.permute(1, 0, 2, 3)
+        y_hat_agent = y_hat[:, :, :, :2]
+        y_hat_agent_uncertainty = y_hat[:, :, :, 2:4]
+        pi_agent = pi[:, :]
+        if self.rotate:
+            data_angles = data['theta']
+            data_origin = data['origin']
+            av_index = data['av_index']
+            av_index = torch.cat((av_index, torch.tensor([data['positions'].shape[0]], device=av_index.device, dtype=av_index.dtype)))
+            replication_counts = (av_index[1:] - av_index[:-1]).cpu()
+            replicated_data_angles = torch.cat([data_angles[i].repeat(count) for i, count in enumerate(replication_counts)])
+            replicated_data_origin = torch.cat([data_origin[i].repeat(count, 1) for i, count in enumerate(replication_counts)])
+
+            data_rotate_angle = data['rotate_angles']
+            data_local_origin = data.positions[:, 19, :]
+            rotate_mat = torch.empty(y_hat.shape[0], 2, 2, device=self.device)
+            sin_vals = torch.sin(-replicated_data_angles)
+            cos_vals = torch.cos(-replicated_data_angles)
+            rotate_mat[:, 0, 0] = cos_vals
+            rotate_mat[:, 0, 1] = -sin_vals
+            rotate_mat[:, 1, 0] = sin_vals
+            rotate_mat[:, 1, 1] = cos_vals
+            rotate_local = torch.empty(y_hat.shape[0], 2, 2, device=self.device)
+            sin_vals_angle = torch.sin(-data_rotate_angle)
+            cos_vals_angle = torch.cos(-data_rotate_angle)
+            rotate_local[:, 0, 0] = cos_vals_angle
+            rotate_local[:, 0, 1] = -sin_vals_angle
+            rotate_local[:, 1, 0] = sin_vals_angle
+            rotate_local[:, 1, 1] = cos_vals_angle
+            for i in range(y_hat.shape[0]):
+                stacked_rotate_mat = torch.stack([rotate_mat[i]] * self.num_modes, dim=0)
+                stacked_rotate_local = torch.stack([rotate_local[i]] * self.num_modes, dim=0)
+                y_hat_agent[i, :, :, :] = torch.bmm(y_hat_agent[i, :, :, :], stacked_rotate_local) \
+                                          + data_local_origin[i].unsqueeze(0).unsqueeze(0)
+                y_hat_agent[i, :, :, :] = torch.bmm(y_hat_agent[i, :, :, :], stacked_rotate_mat) \
+                                          + replicated_data_origin[i].unsqueeze(0).unsqueeze(0)
+
+        
+        save_path = 'result.pkl'
+        cumsum_count = replication_counts.cumsum(dim=0)
+        if os.path.exists(save_path):
+            with open(save_path, 'rb') as file:
+                predict_data = pickle.load(file)
+        else:
+            predict_data = {}
+            
+        traj_list = []
+        scene_idx = 0  # current scene index
+        
+        for i in range(data['positions'].shape[0]):  # loop through all 492 vehicles
+            # Add current trajectory
+            traj_list.append(torch.cat([y_hat_agent[i], y_hat_agent_uncertainty[i]], dim=-1).cpu())
+            
+            # Check if we've reached the end of current scene
+            if i + 1 == cumsum_count[scene_idx]:
+                # Save current scene's trajectories
+                predict_data[data['seq_id'][scene_idx].item()] = torch.cat([v.unsqueeze(0) for v in traj_list], dim=0).numpy()
+                traj_list = []
+                scene_idx += 1
+
         with open(save_path, 'wb') as file:
             pickle.dump(predict_data, file)
 
