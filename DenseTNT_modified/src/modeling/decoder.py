@@ -301,19 +301,17 @@ class Decoder(nn.Module):
         else:
             pass
         if args.visualize:
-            data = {}
-            save_dir ='/home/data/densetnt_traj/stream/traj_full_val_with_uncertainty/'
+            save_path = 'result.pkl'
+            if os.path.exists(save_path):
+                with open(save_path, 'rb') as file:
+                    data = pickle.load(file)
+            else:
+                data = {}
+            
             for i in range(batch_size):
                 scene = os.path.split(mapping[i]['file_name'])[1].split('.')[0].split('-')[1]
-                print(scene)
                 data[scene] = mapping[i]['vis.predict_trajs']
 
-                # utils.visualize_goals_2D(mapping[i], mapping[i]['vis.goals_2D'], mapping[i]['vis.scores'], self.future_frame_num,
-                #                          labels=mapping[i]['vis.labels'],
-                #                          labels_is_valid=mapping[i]['vis.labels_is_valid'],
-                #                          predict=mapping[i]['vis.predict_trajs'])
-            batch_num = len(os.listdir(save_dir))
-            save_path = save_dir+'traj_batch_{}.pkl'.format(batch_num)
             with open(save_path, 'wb') as file:
                 pickle.dump(data, file)
         return pred_trajs_batch, pred_probs_batch, None
