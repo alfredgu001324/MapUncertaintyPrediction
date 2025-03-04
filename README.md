@@ -15,6 +15,24 @@ This repository contains the official implementation of [Producing and Leveragin
 
 Mapping checkpoints are [here](https://drive.google.com/drive/folders/1ZhCv4Z_yI7PLirHLS64luE1fV2EPG0sB?usp=sharing). Trajectory prediction checkpoints are [here](https://drive.google.com/drive/folders/1b46HUqHxeqrZQOYRbtsnltDU2bR8Fjkj?usp=sharing). 
 
+## Dataset
+
+I have uploaded all datasets (complete) for `MapTR`, `StreamMapNet`, `MapTRv2` and `MapTRv2 CL`. They are around 500GB each (StreamMapNet is around 200GB). They are large because they also contain the intermediate BEV features. After downloading, you can simply remove the BEV features to save space. You can download them through Hugging Face. They are located at [here](https://huggingface.co/datasets/alfredgu001324/MapBEVPrediction/tree/main) which should be easier to download.
+
+Dataset Structure is as follows:
+```
+mapbevprediction
+├── stream_bev/
+├── maptr_bev/
+├── maptrv2_bev/
+│   ├── mini_val/
+│   |   ├── data/
+│   |   |   ├── scene-{scene_id}.pkl
+│   ├── train/
+│   ├── val/
+├── maptrv2_cent_bev/
+```
+
 ## News
 - **July 01, 2024**: An [extention](https://github.com/alfredgu001324/MapBEVPrediction) of this work has been published at ECCV 2024. Check it out!
 - **May 29, 2024**: This work has been slected as a **Best Paper Award Finalist** at CVPR 2024! **Top 0.2% of all submissions (24/11,532)**
