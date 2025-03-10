@@ -34,6 +34,7 @@ mapbevprediction
 ```
 
 ## News
+- **Mar 10, 2025**: Another extention of this work that I am involved in is available [here](https://github.com/Ethan-Zheng136/Map-Uncertainty-for-Trajectory-Prediction). Check it out!
 - **July 01, 2024**: An [extention](https://github.com/alfredgu001324/MapBEVPrediction) of this work has been published at ECCV 2024. Check it out!
 - **May 29, 2024**: This work has been slected as a **Best Paper Award Finalist** at CVPR 2024! **Top 0.2% of all submissions (24/11,532)**
 
